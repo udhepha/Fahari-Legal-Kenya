@@ -39,6 +39,9 @@ const HomePage: React.FC<HomePageProps> = ({ newsletterEmail, setNewsletterEmail
                 <Link to="/resources" className="bg-white border border-slate-200 text-slate-700 px-8 py-4 rounded-xl font-bold flex items-center justify-center gap-2 hover:border-accent hover:text-accent transition-all">
                   Explore Resources
                 </Link>
+                <Link to="/civiclense" className="bg-accent text-white px-8 py-4 rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-emerald-700 transition-all shadow-xl shadow-emerald-200">
+                  CivicLens AI <ArrowRight className="w-5 h-5" />
+                </Link>
               </div>
             </motion.div>
           </div>

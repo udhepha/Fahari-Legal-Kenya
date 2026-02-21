@@ -30,6 +30,7 @@ import ResourcesPage from './components/ResourcesPage';
 import SuccessStoriesPage from './components/SuccessStoriesPage';
 import BlogPage from './components/BlogPage';
 import ContactPage from './components/ContactPage';
+import CivicLensPage from './components/CivicLensPage';
 
 // --- Types ---
 
@@ -49,6 +50,7 @@ const NAV_ITEMS: NavItem[] = [
   { label: 'Success Stories', path: '/stories' },
   { label: 'Blog', path: '/blog' },
   { label: 'Contact', path: '/contact' },
+  { label: 'CivicLens AI', path: '/civiclense' },
 ];
 
 // --- Components ---
@@ -171,6 +173,7 @@ export default function App() {
             <Route path="/stories" element={<SuccessStoriesPage />} />
             <Route path="/blog" element={<BlogPage />} />
             <Route path="/contact" element={<ContactPage />} />
+            <Route path="/civiclense" element={<CivicLensPage />} />
           </Routes>
         </main>
 
