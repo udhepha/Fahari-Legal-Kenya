@@ -31,6 +31,7 @@ import SuccessStoriesPage from './components/SuccessStoriesPage';
 import BlogPage from './components/BlogPage';
 import ContactPage from './components/ContactPage';
 import CivicLensPage from './components/CivicLensPage';
+import BlogPostPage from './components/BlogPostPage';
 
 // --- Types ---
 
@@ -172,6 +173,7 @@ export default function App() {
             <Route path="/resources" element={<ResourcesPage />} />
             <Route path="/stories" element={<SuccessStoriesPage />} />
             <Route path="/blog" element={<BlogPage />} />
+            <Route path="/blog/:id" element={<BlogPostPage />} />
             <Route path="/contact" element={<ContactPage />} />
             <Route path="/civiclense" element={<CivicLensPage />} />
           </Routes>
