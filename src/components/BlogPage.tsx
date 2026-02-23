@@ -119,9 +119,9 @@ const BlogPage = () => {
             title="Legal Insights" 
             subtitle="Stay informed about your rights and the changing legal landscape in Kenya."
           />
-          <a href="#" className="hidden md:flex items-center gap-2 text-accent font-bold hover:underline mb-12">
+          <Link to="/blog" className="hidden md:flex items-center gap-2 text-accent font-bold hover:underline mb-12">
             View All Posts <ChevronRight className="w-4 h-4" />
-          </a>
+            </Link>
         </div>
         <div className="grid md:grid-cols-3 gap-8">
           {BLOG_POSTS.map((post) => (
