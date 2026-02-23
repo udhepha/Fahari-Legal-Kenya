@@ -113,6 +113,7 @@ Ensure the output is strict JSON and adheres to the specified enums.`;
             "advocacyInsights",
           ],
         },
+        tools: [{ googleSearch: {} }],
       },
     });
 

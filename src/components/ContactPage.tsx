@@ -36,7 +36,8 @@ const ContactPage = () => {
                 <div>
                   <h4 className="font-bold text-lg">Secure Messaging</h4>
                   <p className="text-slate-400 text-sm">Response time: Within 48 hours.</p>
-                  <p className="mt-2 font-mono text-accent">Signal/WhatsApp: +254 7XX XXX XXX</p>
+                  <p className="mt-2 font-mono text-accent">Email: faharilegal.ke@gmail.com</p>
+                  <p className="font-mono text-accent">Phone: +254 717 347 020</p>
                 </div>
               </div>
             </div>

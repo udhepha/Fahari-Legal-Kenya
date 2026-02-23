@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import {
-  Scale,
   Shield,
   BookOpen,
   MessageSquare,
@@ -18,6 +17,7 @@ import {
   CheckCircle2,
   ExternalLink
 } from 'lucide-react';
+import Logo from './components/Logo';
 import { motion, AnimatePresence } from 'motion/react';
 import { cn } from './lib/utils';
 
@@ -64,7 +64,7 @@ export const SectionHeading = ({ title, subtitle, centered = false }: { title: s
   </div>
 );
 
-export { Scale, Shield, BookOpen, MessageSquare, Phone, ChevronRight, Menu, X, ArrowRight, Landmark, Users, Briefcase, Gavel, AlertCircle, CheckCircle2, ExternalLink };
+export { Shield, BookOpen, MessageSquare, Phone, ChevronRight, Menu, X, ArrowRight, Landmark, Users, Briefcase, Gavel, AlertCircle, CheckCircle2, ExternalLink };
 
 export default function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -97,8 +97,7 @@ export default function App() {
         )}>
           <div className="container mx-auto px-4 md:px-6 flex justify-between items-center">
             <Link to="/" className="flex items-center gap-2">
-              <Scale className="w-8 h-8 text-accent" />
-              <span className="text-xl font-serif font-bold tracking-tight text-primary">FAHARI LEGAL</span>
+              <Logo className="w-[150px] md:w-[180px]" />
             </Link>
 
             {/* Desktop Nav */}
@@ -184,8 +183,7 @@ export default function App() {
           <div className="container mx-auto px-4 md:px-6">
             <div className="flex flex-col md:flex-row justify-between items-center gap-8">
               <Link to="/" className="flex items-center gap-2">
-                <Scale className="w-6 h-6 text-accent" />
-                <span className="text-lg font-serif font-bold tracking-tight text-white">FAHARI LEGAL</span>
+                <Logo isFooter className="w-[120px] md:w-[150px]" />
               </Link>
               
               <div className="flex gap-8 text-sm">
@@ -195,6 +193,8 @@ export default function App() {
               </div>
               
               <p className="text-xs">
+                Email: faharilegal.ke@gmail.com | Phone: +254 717 347 020
+                <br />
                 © 2026 Fahari Legal Kenya. All rights reserved. Built for Justice.
               </p>
             </div>
