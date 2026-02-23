@@ -1,15 +1,43 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { SectionHeading } from '../App';
 import { CivicLensEngine, IssueCategory, UrgencyLevel, CivicLensAnalysis } from '../civiclense/CivicLensEngine';
 import { GoogleGenAI } from '@google/genai';
 import { cn } from '../lib/utils';
 import { Loader2, AlertCircle, CheckCircle2, Lightbulb, MapPin, Building2, TrendingUp } from 'lucide-react';
 
+declare global {
+  interface Window {
+    aistudio?: {
+      hasSelectedApiKey: () => Promise<boolean>;
+      openSelectKey: () => Promise<void>;
+    };
+  }
+}
+
 const CivicLensPage: React.FC = () => {
   const [issueText, setIssueText] = useState('');
   const [analysis, setAnalysis] = useState<CivicLensAnalysis | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [hasApiKey, setHasApiKey] = useState(false);
+
+  useEffect(() => {
+    const checkApiKey = async () => {
+      if (window.aistudio) {
+        const selected = await window.aistudio.hasSelectedApiKey();
+        setHasApiKey(selected);
+      }
+    };
+    checkApiKey();
+  }, []);
+
+  const handleSelectApiKey = async () => {
+    if (window.aistudio) {
+      await window.aistudio.openSelectKey();
+      // Assume selection was successful and proceed. If it fails, the API call will catch it.
+      setHasApiKey(true);
+    }
+  };
 
   const handleAnalyze = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -23,14 +51,27 @@ const CivicLensPage: React.FC = () => {
       return;
     }
 
+    if (!hasApiKey || !process.env.GEMINI_API_KEY) {
+      setError('API key not selected. Please select an API key first.');
+      setLoading(false);
+      return;
+    }
+
     try {
-      const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY! });
+      // Create a new GoogleGenAI instance right before making an API call
+      // to ensure it always uses the most up-to-date API key from the dialog.
       const engine = new CivicLensEngine({ apiKey: process.env.GEMINI_API_KEY!, model: 'gemini-3-flash-preview' });
       const result = await engine.analyzeIssue(issueText);
       setAnalysis(result);
     } catch (err: any) {
       console.error('CivicLens analysis failed:', err);
-      setError(err.message || 'Failed to analyze the issue. Please try again.');
+      // If the error is due to an invalid API key, prompt the user to select again.
+      if (err.message && err.message.includes("Requested entity was not found")) {
+        setHasApiKey(false);
+        setError("Invalid API key. Please select a valid API key.");
+      } else {
+        setError(err.message || 'Failed to analyze the issue. Please try again.');
+      }
     } finally {
       setLoading(false);
     }
@@ -46,42 +87,62 @@ const CivicLensPage: React.FC = () => {
         />
 
         <div className="max-w-3xl mx-auto bg-white p-8 rounded-2xl shadow-lg border border-slate-200">
-          <form onSubmit={handleAnalyze} className="space-y-6">
-            <div>
-              <label htmlFor="issueText" className="block text-sm font-medium text-slate-700 mb-2">
-                Describe the Civic Issue
-              </label>
-              <textarea
-                id="issueText"
-                rows={8}
-                className="w-full p-4 border border-slate-300 rounded-lg focus:ring-accent focus:border-accent outline-none transition-colors"
-                placeholder="E.g., 'The local government has failed to provide clean water to residents in informal settlements for the past six months, leading to widespread disease outbreaks. Community leaders have repeatedly raised concerns, but no action has been taken by the municipal council.'"
-                value={issueText}
-                onChange={(e) => setIssueText(e.target.value)}
-                disabled={loading}
-              ></textarea>
+          {!hasApiKey ? (
+            <div className="text-center space-y-4">
+              <AlertCircle className="w-12 h-12 text-amber-500 mx-auto" />
+              <h3 className="text-xl font-bold text-primary">API Key Required</h3>
+              <p className="text-slate-600">Please select a Gemini API key to use CivicLens AI. This model requires a paid Google Cloud project.</p>
+              <button
+                onClick={handleSelectApiKey}
+                className="bg-accent text-white font-bold py-3 px-6 rounded-lg hover:bg-emerald-700 transition-colors"
+              >
+                Select API Key
+              </button>
+              <p className="text-sm text-slate-500 mt-4">
+                Learn more about Gemini API billing:
+                <a href="https://ai.google.dev/gemini-api/docs/billing" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline ml-1">
+                  ai.google.dev/gemini-api/docs/billing
+                </a>
+              </p>
             </div>
-            <button
-              type="submit"
-              className={cn(
-                "w-full bg-accent text-white font-bold py-3 px-6 rounded-lg transition-colors flex items-center justify-center gap-2",
-                loading ? 'opacity-70 cursor-not-allowed' : 'hover:bg-emerald-700'
-              )}
-              disabled={loading}
-            >
-              {loading && <Loader2 className="w-5 h-5 animate-spin" />}
-              {loading ? 'Analyzing...' : 'Analyze Issue'}
-            </button>
-          </form>
+          ) : (
+            <form onSubmit={handleAnalyze} className="space-y-6">
+              <div>
+                <label htmlFor="issueText" className="block text-sm font-medium text-slate-700 mb-2">
+                  Describe the Civic Issue
+                </label>
+                <textarea
+                  id="issueText"
+                  rows={8}
+                  className="w-full p-4 border border-slate-300 rounded-lg focus:ring-accent focus:border-accent outline-none transition-colors"
+                  placeholder="E.g., 'The local government has failed to provide clean water to residents in informal settlements for the past six months, leading to widespread disease outbreaks. Community leaders have repeatedly raised concerns, but no action has been taken by the municipal council.'"
+                  value={issueText}
+                  onChange={(e) => setIssueText(e.target.value)}
+                  disabled={loading}
+                ></textarea>
+              </div>
+              <button
+                type="submit"
+                className={cn(
+                  "w-full bg-accent text-white font-bold py-3 px-6 rounded-lg transition-colors flex items-center justify-center gap-2",
+                  loading ? 'opacity-70 cursor-not-allowed' : 'hover:bg-emerald-700'
+                )}
+                disabled={loading}
+              >
+                {loading && <Loader2 className="w-5 h-5 animate-spin" />}
+                {loading ? 'Analyzing...' : 'Analyze Issue'}
+              </button>
+            </form>
+          )}
 
-          {error && (
+          {error && hasApiKey && (
             <div className="mt-8 p-4 bg-red-50 border border-red-200 text-red-700 rounded-lg flex items-center gap-3">
               <AlertCircle className="w-5 h-5 flex-shrink-0" />
               <p className="text-sm font-medium">Error: {error}</p>
             </div>
           )}
 
-          {analysis && (
+          {analysis && hasApiKey && (
             <div className="mt-8 space-y-8">
               <h3 className="text-2xl font-bold text-primary">Analysis Results</h3>
 
