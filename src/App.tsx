@@ -32,6 +32,9 @@ import BlogPage from './components/BlogPage';
 import ContactPage from './components/ContactPage';
 import CivicLensPage from './components/CivicLensPage';
 import BlogPostPage from './components/BlogPostPage';
+import LegalChatbotPage from './components/LegalChatbotPage';
+import LegalNewsFeedPage from './components/LegalNewsFeedPage';
+import LegalResourcesGuidesPage from './components/LegalResourcesGuidesPage';
 
 // --- Types ---
 
@@ -52,6 +55,9 @@ const NAV_ITEMS: NavItem[] = [
   { label: 'Blog', path: '/blog' },
   { label: 'Contact', path: '/contact' },
   { label: 'CivicLens AI', path: '/civiclense' },
+  { label: 'Legal Chatbot', path: '/chatbot' },
+  { label: 'Legal News Feed', path: '/news' },
+  { label: 'Legal Resources & Guides', path: '/resources-guides' },
 ];
 
 // --- Components ---
@@ -175,6 +181,9 @@ export default function App() {
             <Route path="/blog/:id" element={<BlogPostPage />} />
             <Route path="/contact" element={<ContactPage />} />
             <Route path="/civiclense" element={<CivicLensPage />} />
+            <Route path="/chatbot" element={<LegalChatbotPage />} />
+            <Route path="/news" element={<LegalNewsFeedPage />} />
+            <Route path="/resources-guides" element={<LegalResourcesGuidesPage />} />
           </Routes>
         </main>
 

@@ -7,8 +7,8 @@ interface LogoProps {
 }
 
 const Logo: React.FC<LogoProps> = ({ className, isFooter = false }) => {
-  const normalLogoSrc = '/logos/fahari-legal-normal.png';
-  const glowingLogoSrc = '/logos/fahari-legal-glowing.png';
+  const normalLogoSrc = '/files/file_00000000f40871fda93d9c281d3fe5c2_mw9zig';
+  const glowingLogoSrc = '/files/file_0000000021bc71fda0fc864f5a7e3c9e_fhmgf4';
 
   const logoSrc = isFooter ? glowingLogoSrc : normalLogoSrc;
 
